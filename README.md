@@ -6,7 +6,7 @@ Repository: [https://github.com/gauravpz/GalaxyApp](https://github.com/gauravpz/
 
 ## Overview
 
-The application features three distinct offline games implemented with pure Kotlin Compose state loops, coupled with a secure background configuration synchronization worker using Android WorkManager.
+The application features offline games implemented with pure Kotlin Compose state loops, coupled with a secure background configuration synchronization worker using Android WorkManager and local playtime management.
 
 ---
 
@@ -30,6 +30,10 @@ The application features three distinct offline games implemented with pure Kotl
 - **Loop Timing**: Controlled by a Kotlin `while(isPlaying)` coroutine loop cycling every $X$ milliseconds based on remote configuration (`reactionIntervalMs`).
 - **Scoring**: Tapping before the target teleports awards **+10 points** and immediately resets the cycle.
 
+### 4. Daily Educational Quiz
+- **Subjects**: Multi-subject question banks (Math, English, Hindi, Marathi) with kid-friendly interactive choices.
+- **Explanations**: Provides immediate feedback and explanations upon selection.
+
 ---
 
 ## Configuration & Background Sync
@@ -45,6 +49,7 @@ The application features three distinct offline games implemented with pure Kotl
 
 ### Local Storage & State Management
 - **Jetpack DataStore**: Configuration values (`difficulty`, `mathMaxRange`, `mathMinRange`, `reactionIntervalMs`, `colorBlinkSpeedMs`, `wordStrings`, `taskArrays`) are persisted locally.
+- **Playtime Manager**: Tracks daily session length, enforces configured daily play limits (e.g. 30 minutes) and break reminders.
 - **Central ViewModel**: `GameViewModel` exposes configuration via Kotlin `StateFlow<GameConfig>` and updates high scores in real-time.
 
 ---

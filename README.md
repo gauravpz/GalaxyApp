@@ -2,6 +2,8 @@
 
 A clean, native Jetpack Compose for Wear OS multi-game application built for 8-10 year olds on Samsung Galaxy Watch (optimized for circular displays including Galaxy Watch 8).
 
+Repository: [https://github.com/gauravpz/GalaxyApp](https://github.com/gauravpz/GalaxyApp)
+
 ## Overview
 
 The application features three distinct offline games implemented with pure Kotlin Compose state loops, coupled with a secure background configuration synchronization worker using Android WorkManager.
@@ -51,3 +53,4 @@ The application features three distinct offline games implemented with pure Kotl
 - **Zero 3rd-Party Game Binaries**: 100% pure native Kotlin with Jetpack Compose for Wear OS.
 - **No Tracking or External Engines**: No Unity, Godot, or unverified black-box libraries.
 - **Galaxy Watch 8 Circular Compliance**: Standard Box layout with minimum `16.dp` outer boundary padding on every game screen.
+- **Pure Local Sandboxing**: Games execute entirely from local state with no ad networks, analytic trackers, or unauthorized background sockets.

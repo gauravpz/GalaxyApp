@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -29,11 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.icons.Icons
-import androidx.wear.compose.material.icons.filled.PlayArrow
-import androidx.wear.compose.material.icons.filled.Refresh
-import androidx.wear.compose.material.icons.filled.Star
-import androidx.wear.compose.material.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
 import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.rememberScalingLazyListState
 import com.gaurav.galaxyapp.data.GameConfig
@@ -68,13 +65,13 @@ fun GameHubScreen(
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
-            horizontalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Header
             item {
                 Column(
-                    horizontalAlignment = Alignment.CenterVertically,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(bottom = 4.dp)
                 ) {
                     Text(
@@ -112,7 +109,6 @@ fun GameHubScreen(
                     title = "1. Math Dash",
                     subtitle = "Quick equations • High: $mathHighScore",
                     gradient = listOf(Color(0xFF1E3A8A), Color(0xFF2563EB)),
-                    iconColor = Color(0xFF60A5FA),
                     onClick = { onNavigate(ActiveScreen.MATH_DASH) }
                 )
             }
@@ -123,7 +119,6 @@ fun GameHubScreen(
                     title = "2. Color Memo",
                     subtitle = "Simon Says • High: $colorMemoHighScore",
                     gradient = listOf(Color(0xFF065F46), Color(0xFF059669)),
-                    iconColor = Color(0xFF34D399),
                     onClick = { onNavigate(ActiveScreen.COLOR_MEMO) }
                 )
             }
@@ -134,7 +129,6 @@ fun GameHubScreen(
                     title = "3. Fast Tapper",
                     subtitle = "Whack-a-Mole • High: $reactionHighScore",
                     gradient = listOf(Color(0xFF7F1D1D), Color(0xFFDC2626)),
-                    iconColor = Color(0xFFF87171),
                     onClick = { onNavigate(ActiveScreen.REACTION_TAPPER) }
                 )
             }
@@ -181,7 +175,6 @@ private fun GameLauncherCard(
     title: String,
     subtitle: String,
     gradient: List<Color>,
-    iconColor: Color,
     onClick: () -> Unit
 ) {
     Box(

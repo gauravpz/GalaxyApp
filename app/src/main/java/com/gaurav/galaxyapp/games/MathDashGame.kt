@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.icons.Icons
-import androidx.wear.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import com.gaurav.galaxyapp.data.GameConfig
 import kotlin.random.Random
 
@@ -139,8 +139,7 @@ fun MathDashGame(
     ) {
         // Back icon button at top
         Box(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
             Row(
@@ -154,7 +153,7 @@ fun MathDashGame(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
                     tint = Color(0xFFAAAAAA),
                     modifier = Modifier.size(14.dp)
@@ -171,7 +170,7 @@ fun MathDashGame(
         // Main game content column
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             // Difficulty tag and score display

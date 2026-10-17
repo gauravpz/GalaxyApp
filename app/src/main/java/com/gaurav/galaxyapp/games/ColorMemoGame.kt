@@ -1,20 +1,14 @@
 package com.gaurav.galaxyapp.games
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -35,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.icons.Icons
-import androidx.wear.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import com.gaurav.galaxyapp.data.GameConfig
 import kotlinx.coroutines.delay
 import kotlin.random.Random
@@ -156,7 +150,7 @@ fun ColorMemoGame(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Exit",
                     tint = Color(0xFFAAAAAA),
                     modifier = Modifier.size(14.dp)
@@ -180,7 +174,7 @@ fun ColorMemoGame(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .size(width = 60.dp, height = 36.dp)
-                    .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp, bottomStart = 8.dp, bottomEnd = 8.dp))
+                    .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp, bottomEnd = 8.dp, bottomStart = 8.dp))
                     .background(
                         if (activeHighlight == COLOR_TOP_RED) Color(0xFFFF5252) else Color(0xFF881B1B)
                     )
@@ -195,7 +189,7 @@ fun ColorMemoGame(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .size(width = 60.dp, height = 36.dp)
-                    .clip(RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp, topStart = 8.dp, topEnd = 8.dp))
+                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp, bottomEnd = 30.dp, bottomStart = 30.dp))
                     .background(
                         if (activeHighlight == COLOR_BOTTOM_YELLOW) Color(0xFFFFEB3B) else Color(0xFF8B8000)
                     )
@@ -210,7 +204,7 @@ fun ColorMemoGame(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .size(width = 36.dp, height = 60.dp)
-                    .clip(RoundedCornerShape(topStart = 30.dp, bottomStart = 30.dp, topEnd = 8.dp, bottomEnd = 8.dp))
+                    .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 8.dp, bottomEnd = 8.dp, bottomStart = 30.dp))
                     .background(
                         if (activeHighlight == COLOR_LEFT_GREEN) Color(0xFF69F0AE) else Color(0xFF1B5E20)
                     )
@@ -225,7 +219,7 @@ fun ColorMemoGame(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .size(width = 36.dp, height = 60.dp)
-                    .clip(RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp, topStart = 8.dp, bottomEnd = 8.dp))
+                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 30.dp, bottomEnd = 30.dp, bottomStart = 8.dp))
                     .background(
                         if (activeHighlight == COLOR_RIGHT_BLUE) Color(0xFF40C4FF) else Color(0xFF0D47A1)
                     )
@@ -245,7 +239,7 @@ fun ColorMemoGame(
             ) {
                 if (isGameOver) {
                     Column(
-                        horizontalAlignment = Alignment.CenterVertically,
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
@@ -273,7 +267,7 @@ fun ColorMemoGame(
                     }
                 } else {
                     Column(
-                        horizontalAlignment = Alignment.CenterVertically
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = "RND $roundNumber",

@@ -34,10 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.icons.Icons
-import androidx.wear.compose.material.icons.filled.ArrowBack
-import androidx.wear.compose.material.icons.filled.PlayArrow
-import androidx.wear.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import com.gaurav.galaxyapp.data.GameConfig
 import kotlinx.coroutines.delay
 import kotlin.math.cos
@@ -148,7 +147,7 @@ fun ReactionTapperGame(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Exit",
                     tint = Color(0xFFAAAAAA),
                     modifier = Modifier.size(14.dp)
@@ -192,7 +191,7 @@ fun ReactionTapperGame(
         } else {
             // Game Over / Summary
             Column(
-                horizontalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(

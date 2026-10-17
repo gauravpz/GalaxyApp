@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.gaurav.galaxyapp.data.GameConfig
 import com.gaurav.galaxyapp.data.GameConfigRepository
+import com.gaurav.galaxyapp.data.PlaytimeManager
 import com.gaurav.galaxyapp.worker.ConfigSyncWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = GameConfigRepository(application)
+    private val playtimeManager = PlaytimeManager(application)
 
     // Central config StateFlow collected by all games
     val configState: StateFlow<GameConfig> = repository.configFlow
@@ -23,6 +25,14 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = GameConfig()
+        )
+
+    // Daily playtime in seconds tracked and reset daily
+    val todayPlaySeconds: StateFlow<Long> = playtimeManager.todayPlaySecondsFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0L
         )
 
     // High scores tracked in local memory state
@@ -34,6 +44,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _reactionHighScore = MutableStateFlow(0)
     val reactionHighScore: StateFlow<Int> = _reactionHighScore.asStateFlow()
+
+    private val _quizHighScore = MutableStateFlow(0)
+    val quizHighScore: StateFlow<Int> = _quizHighScore.asStateFlow()
 
     fun updateMathScore(newScore: Int) {
         if (newScore > _mathScore.value) {
@@ -50,6 +63,18 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun updateReactionHighScore(score: Int) {
         if (score > _reactionHighScore.value) {
             _reactionHighScore.value = score
+        }
+    }
+
+    fun updateQuizHighScore(score: Int) {
+        if (score > _quizHighScore.value) {
+            _quizHighScore.value = score
+        }
+    }
+
+    fun recordPlaytime(seconds: Long) {
+        viewModelScope.launch {
+            playtimeManager.addPlayTime(seconds)
         }
     }
 

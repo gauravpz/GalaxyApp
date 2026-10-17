@@ -1,0 +1,336 @@
+{
+  "configVersion": "1.1.0",
+  "lastUpdated": "2026-10-18T05:20:00Z",
+  "difficulty": "medium",
+  "mathMaxRange": 20,
+  "mathMinRange": 1,
+  "reactionIntervalMs": 1000,
+  "colorBlinkSpeedMs": 450,
+  "wordStrings": [
+    "STAR",
+    "MOON",
+    "SUN",
+    "COMET",
+    "GALAXY",
+    "PLANET",
+    "ORBIT",
+    "ROCKET"
+  ],
+  "taskArrays": [
+    "Find numbers",
+    "Follow colors",
+    "Tap targets",
+    "Math practice",
+    "Word quiz"
+  ],
+  "monitoring": {
+    "enabled": true,
+    "maxDailyPlayTimeMinutes": 30,
+    "breakReminderMinutes": 15,
+    "trackSessionDuration": true,
+    "trackSubjects": [
+      "math",
+      "english",
+      "hindi",
+      "marathi",
+      "color_memo",
+      "fast_tapper"
+    ],
+    "syncPlayStats": true,
+    "quietHours": {
+      "enabled": true,
+      "startHour": 21,
+      "endHour": 7
+    }
+  },
+  "questions": {
+    "math": [
+      {
+        "id": "m1",
+        "question": "7 × 8 = ?",
+        "options": ["54", "56", "64"],
+        "answer": "56",
+        "explanation": "7 times 8 is 56"
+      },
+      {
+        "id": "m2",
+        "question": "35 + 27 = ?",
+        "options": ["52", "62", "72"],
+        "answer": "62",
+        "explanation": "35 + 27 = 62"
+      },
+      {
+        "id": "m3",
+        "question": "74 - 28 = ?",
+        "options": ["46", "56", "44"],
+        "answer": "46",
+        "explanation": "74 - 28 = 46"
+      },
+      {
+        "id": "m4",
+        "question": "9 × 6 = ?",
+        "options": ["54", "45", "63"],
+        "answer": "54",
+        "explanation": "9 times 6 is 54"
+      },
+      {
+        "id": "m5",
+        "question": "36 ÷ 4 = ?",
+        "options": ["8", "9", "7"],
+        "answer": "9",
+        "explanation": "36 divided by 4 is 9"
+      },
+      {
+        "id": "m6",
+        "question": "Sides of a Triangle?",
+        "options": ["3", "4", "5"],
+        "answer": "3",
+        "explanation": "A triangle has 3 sides"
+      },
+      {
+        "id": "m7",
+        "question": "Minutes in 1 hour?",
+        "options": ["50", "60", "100"],
+        "answer": "60",
+        "explanation": "There are 60 minutes in an hour"
+      },
+      {
+        "id": "m8",
+        "question": "8 × 4 = ?",
+        "options": ["32", "28", "36"],
+        "answer": "32",
+        "explanation": "8 times 4 is 32"
+      },
+      {
+        "id": "m9",
+        "question": "45 ÷ 5 = ?",
+        "options": ["9", "7", "8"],
+        "answer": "9",
+        "explanation": "45 divided by 5 is 9"
+      },
+      {
+        "id": "m10",
+        "question": "Which is greater?",
+        "options": ["1 kg", "500 g", "750 g"],
+        "answer": "1 kg",
+        "explanation": "1 kg = 1000 g, which is greater"
+      }
+    ],
+    "english": [
+      {
+        "id": "e1",
+        "question": "Opposite of 'Huge'?",
+        "options": ["Tiny", "Large", "Heavy"],
+        "answer": "Tiny",
+        "explanation": "Tiny means very small"
+      },
+      {
+        "id": "e2",
+        "question": "Plural of 'Child'?",
+        "options": ["Children", "Childs", "Childrens"],
+        "answer": "Children",
+        "explanation": "Plural of child is children"
+      },
+      {
+        "id": "e3",
+        "question": "Synonym of 'Glad'?",
+        "options": ["Happy", "Sad", "Angry"],
+        "answer": "Happy",
+        "explanation": "Glad means happy"
+      },
+      {
+        "id": "e4",
+        "question": "Opposite of 'Brave'?",
+        "options": ["Coward", "Strong", "Clever"],
+        "answer": "Coward",
+        "explanation": "Coward is opposite of brave"
+      },
+      {
+        "id": "e5",
+        "question": "Plural of 'Leaf'?",
+        "options": ["Leaves", "Leafs", "Leafes"],
+        "answer": "Leaves",
+        "explanation": "Leaf becomes leaves in plural"
+      },
+      {
+        "id": "e6",
+        "question": "Identify the Noun: 'A cat ran.'",
+        "options": ["Cat", "Ran", "Fast"],
+        "answer": "Cat",
+        "explanation": "Cat is an animal noun"
+      },
+      {
+        "id": "e7",
+        "question": "Past tense of 'Run'?",
+        "options": ["Ran", "Runned", "Running"],
+        "answer": "Ran",
+        "explanation": "Yesterday he ran"
+      },
+      {
+        "id": "e8",
+        "question": "Fill: I saw ___ owl.",
+        "options": ["An", "A", "The"],
+        "answer": "An",
+        "explanation": "Owl starts with a vowel sound (O), so 'an'"
+      },
+      {
+        "id": "e9",
+        "question": "Plural of 'Mouse'?",
+        "options": ["Mice", "Mouses", "Mees"],
+        "answer": "Mice",
+        "explanation": "Irregular plural: mouse -> mice"
+      },
+      {
+        "id": "e10",
+        "question": "Opposite of 'Ancient'?",
+        "options": ["Modern", "Old", "Past"],
+        "answer": "Modern",
+        "explanation": "Modern is opposite of ancient"
+      }
+    ],
+    "hindi": [
+      {
+        "id": "h1",
+        "question": "'मित्र' का विलोम शब्द?",
+        "options": ["शत्रु", "दोस्त", "सखा"],
+        "answer": "शत्रु",
+        "explanation": "मित्र का उल्टा शत्रु होता है"
+      },
+      {
+        "id": "h2",
+        "question": "'जल' का समानार्थी शब्द?",
+        "options": ["पानी", "आग", "हवा"],
+        "answer": "पानी",
+        "explanation": "जल को पानी भी कहते हैं"
+      },
+      {
+        "id": "h3",
+        "question": "'शेर' का स्त्रीलिंग क्या है?",
+        "options": ["शेरनी", "शेरी", "शेरिन"],
+        "answer": "शेरनी",
+        "explanation": "शेर का स्त्रीलिंग शेरनी"
+      },
+      {
+        "id": "h4",
+        "question": "'सच' का विलोम शब्द?",
+        "options": ["झूठ", "सही", "सत्य"],
+        "answer": "झूठ",
+        "explanation": "सच का विलोम झूठ"
+      },
+      {
+        "id": "h5",
+        "question": "'किताब' का बहुवचन?",
+        "options": ["किताबें", "किताबों", "किताबी"],
+        "answer": "किताबें",
+        "explanation": "एक किताब, अनेक किताबें"
+      },
+      {
+        "id": "h6",
+        "question": "'सूर्य' का पर्यायवाची?",
+        "options": ["सूरज", "चाँद", "तारा"],
+        "answer": "सूरज",
+        "explanation": "सूर्य का अर्थ सूरज"
+      },
+      {
+        "id": "h7",
+        "question": "भारत का राष्ट्रीय पक्षी?",
+        "options": ["मोर", "तोता", "कबूतर"],
+        "answer": "मोर",
+        "explanation": "भारत का राष्ट्रीय पक्षी मोर है"
+      },
+      {
+        "id": "h8",
+        "question": "'नया' का विलोम शब्द?",
+        "options": ["पुराना", "ताज़ा", "सुंदर"],
+        "answer": "पुराना",
+        "explanation": "नया का उल्टा पुराना"
+      },
+      {
+        "id": "h9",
+        "question": "सप्ताह में कितने दिन?",
+        "options": ["७", "५", "१०"],
+        "answer": "७",
+        "explanation": "एक सप्ताह में ७ दिन होते हैं"
+      },
+      {
+        "id": "h10",
+        "question": "'पत्ता' का बहुवचन?",
+        "options": ["पत्ते", "पत्तों", "पत्तियाँ"],
+        "answer": "पत्ते",
+        "explanation": "एक पत्ता, अनेक पत्ते"
+      }
+    ],
+    "marathi": [
+      {
+        "id": "mr1",
+        "question": "'लहान' चा विरुद्धार्थी शब्द?",
+        "options": ["मोठा", "उंच", "जाड"],
+        "answer": "मोठा",
+        "explanation": "लहान चा विरुद्धार्थी मोठा"
+      },
+      {
+        "id": "mr2",
+        "question": "'पाणी' चा समानार्थी शब्द?",
+        "options": ["जल", "हवा", "अग्नी"],
+        "answer": "जल",
+        "explanation": "पाणी म्हणजे जल/नीर"
+      },
+      {
+        "id": "mr3",
+        "question": "'मुलगा' चे लिंग बदला:",
+        "options": ["मुलगी", "स्त्री", "ताई"],
+        "answer": "मुलगी",
+        "explanation": "मुलगा चे स्त्रीलिंग मुलगी"
+      },
+      {
+        "id": "mr4",
+        "question": "'दिवस' चा विरुद्धार्थी शब्द?",
+        "options": ["रात्र", "सकाळ", "दुपार"],
+        "answer": "रात्र",
+        "explanation": "दिवस चा उलट रात्र"
+      },
+      {
+        "id": "mr5",
+        "question": "'फूल' चे अनेकवचन काय?",
+        "options": ["फुले", "फुला", "फुलांचे"],
+        "answer": "फुले",
+        "explanation": "एक फूल, अनेक फुले"
+      },
+      {
+        "id": "mr6",
+        "question": "'झाड' चा समानार्थी शब्द?",
+        "options": ["वृक्ष", "पान", "मूळ"],
+        "answer": "वृक्ष",
+        "explanation": "झाड म्हणजे वृक्ष"
+      },
+      {
+        "id": "mr7",
+        "question": "महाराष्ट्राची राजधानी कोणती?",
+        "options": ["मुंबई", "पुणे", "नागपूर"],
+        "answer": "मुंबई",
+        "explanation": "मुंबई ही महाराष्ट्राची राजधानी आहे"
+      },
+      {
+        "id": "mr8",
+        "question": "'खरे' चा विरुद्धार्थी शब्द?",
+        "options": ["खोटे", "सत्य", "योग्य"],
+        "answer": "खोटे",
+        "explanation": "खरे चा विरुद्ध खोटे"
+      },
+      {
+        "id": "mr9",
+        "question": "आठवड्यात किती दिवस असतात?",
+        "options": ["७", "६", "५"],
+        "answer": "७",
+        "explanation": "एका आठवड्यात ७ दिवस असतात"
+      },
+      {
+        "id": "mr10",
+        "question": "'घोडा' चे स्त्रीलिंग काय?",
+        "options": ["घोडी", "अश्विनी", "घोडीण"],
+        "answer": "घोडी",
+        "explanation": "घोडा चे स्त्रीलिंग घोडी"
+      }
+    ]
+  }
+}

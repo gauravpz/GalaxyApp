@@ -12,6 +12,8 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.gaurav.galaxyapp.data.GameConfig
 import com.gaurav.galaxyapp.data.GameConfigRepository
+import com.gaurav.galaxyapp.data.MonitoringConfig
+import com.gaurav.galaxyapp.data.QuizQuestion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -27,10 +29,8 @@ import java.util.concurrent.TimeUnit
  *
  * Requirements:
  * - 1-hour interval with NetworkType.CONNECTED constraint.
- * - Endpoint URL: https://github.com{OWNER}/{REPO}/contents/config.json
- * - Headers:
- *     "Accept: application/vnd.github.v3.raw"
- *     "Authorization: Bearer YOUR_GITHUB_PAT"
+ * - Endpoint: Synchronizes from GitHub repository (supports raw endpoint and API contents endpoint).
+ * - Restores questions for Math, English, Hindi, and Marathi along with playtime monitoring rules.
  * - Network activity strictly restricted to this worker block.
  */
 class ConfigSyncWorker(
@@ -42,10 +42,10 @@ class ConfigSyncWorker(
         private const val TAG = "ConfigSyncWorker"
         const val UNIQUE_WORK_NAME = "PeriodicGameConfigSync"
 
-        // Default configured values (can be overridden via inputData or BuildConfig)
-        var owner: String = "owner"
-        var repo: String = "repo"
-        var githubPat: String = "YOUR_GITHUB_PAT"
+        var owner: String = "gauravpz"
+        var repo: String = "GalaxyApp"
+        var branch: String = "main"
+        var githubPat: String = ""
 
         /**
          * Schedules the 1-hour periodic work request with network connected constraint.
@@ -68,7 +68,7 @@ class ConfigSyncWorker(
         }
 
         /**
-         * Enqueues an immediate one-time sync request (useful for testing or initial startup).
+         * Enqueues an immediate one-time sync request (e.g. manual sync button or when Wi-Fi connects).
          */
         fun enqueueOneTimeSync(context: Context) {
             val constraints = Constraints.Builder()
@@ -87,51 +87,65 @@ class ConfigSyncWorker(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val repository = GameConfigRepository(context)
 
-        // Construct endpoint URL according to requirement:
-        // https://github.com{OWNER}/{REPO}/contents/config.json or https://api.github.com/repos/{OWNER}/{REPO}/contents/config.json
-        val endpointUrl = if (owner == "owner" && repo == "repo") {
-            "https://github.com/{OWNER}/{REPO}/contents/config.json"
-        } else {
-            "https://api.github.com/repos/$owner/$repo/contents/config.json"
+        // Try primary raw URL first, then fallback to GitHub API endpoint
+        val rawUrl = "https://raw.githubusercontent.com/$owner/$repo/$branch/config.json"
+        val apiUrl = "https://api.github.com/repos/$owner/$repo/contents/config.json"
+
+        Log.d(TAG, "Initiating remote config fetch from: $rawUrl")
+
+        var configJsonString = fetchHttp(rawUrl, isRaw = true)
+        if (configJsonString == null) {
+            Log.d(TAG, "Raw fetch failed, attempting GitHub API: $apiUrl")
+            configJsonString = fetchHttp(apiUrl, isRaw = false)
         }
 
-        Log.d(TAG, "Initiating secure config fetch from: $endpointUrl")
+        if (configJsonString != null) {
+            try {
+                val parsedConfig = parseConfigJson(configJsonString)
+                repository.saveConfig(parsedConfig)
+                Log.d(TAG, "Game config successfully updated from remote repository: v${parsedConfig.configVersion}")
+                Result.success()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error parsing fetched config JSON: ${e.message}")
+                Result.success()
+            }
+        } else {
+            Log.w(TAG, "Could not fetch remote config. Retaining offline local sandbox configuration.")
+            Result.success()
+        }
+    }
 
+    private fun fetchHttp(endpointUrl: String, isRaw: Boolean): String? {
         var connection: HttpURLConnection? = null
-        try {
+        return try {
             val url = URL(endpointUrl)
             connection = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "GET"
-                connectTimeout = 10000
-                readTimeout = 10000
-                // Strictly required headers
-                setRequestProperty("Accept", "application/vnd.github.v3.raw")
-                setRequestProperty("Authorization", "Bearer $githubPat")
+                connectTimeout = 8000
+                readTimeout = 8000
                 setRequestProperty("User-Agent", "GalaxyApp-WearOS")
+                if (!isRaw) {
+                    setRequestProperty("Accept", "application/vnd.github.v3.raw")
+                }
+                if (githubPat.isNotBlank() && !githubPat.startsWith("YOUR_")) {
+                    setRequestProperty("Authorization", "Bearer $githubPat")
+                }
                 doInput = true
             }
 
             val responseCode = connection.responseCode
-            Log.d(TAG, "Sync HTTP Response Code: $responseCode")
-
             if (responseCode in 200..299) {
                 val reader = BufferedReader(InputStreamReader(connection.inputStream))
-                val responseBody = reader.readText()
+                val content = reader.readText()
                 reader.close()
-
-                val parsedConfig = parseConfigJson(responseBody)
-                repository.saveConfig(parsedConfig)
-                Log.d(TAG, "Game config successfully updated from remote repository: $parsedConfig")
-                Result.success()
+                content
             } else {
-                Log.w(TAG, "Config fetch returned non-success HTTP status: $responseCode. Retaining local defaults.")
-                // Return success so periodic job continues, or retry on transient network errors
-                Result.success()
+                Log.w(TAG, "HTTP $responseCode from $endpointUrl")
+                null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching remote config: ${e.message}. Retaining offline local sandbox configuration.")
-            // Keep app 100% offline-resilient: if remote is unreachable or dummy credentials, return success
-            Result.success()
+            Log.w(TAG, "HTTP Exception fetching $endpointUrl: ${e.message}")
+            null
         } finally {
             connection?.disconnect()
         }
@@ -140,7 +154,7 @@ class ConfigSyncWorker(
     private fun parseConfigJson(jsonStr: String): GameConfig {
         val json = JSONObject(jsonStr)
 
-        val difficulty = json.optString("difficulty", "easy")
+        val difficulty = json.optString("difficulty", "medium")
         val mathMax = json.optInt("mathMaxRange", when (difficulty) {
             "hard" -> 50
             "medium" -> 20
@@ -149,7 +163,7 @@ class ConfigSyncWorker(
         val mathMin = json.optInt("mathMinRange", 1)
         val reactionInterval = json.optLong("reactionIntervalMs", when (difficulty) {
             "hard" -> 700L
-            "medium" -> 900L
+            "medium" -> 1000L
             else -> 1200L
         })
         val colorBlinkSpeed = json.optLong("colorBlinkSpeedMs", when (difficulty) {
@@ -157,7 +171,7 @@ class ConfigSyncWorker(
             "medium" -> 450L
             else -> 550L
         })
-        val version = json.optString("configVersion", "1.0.0")
+        val version = json.optString("configVersion", "1.1.0")
 
         val wordsList = mutableListOf<String>()
         val wordsArray: JSONArray? = json.optJSONArray("wordStrings")
@@ -166,7 +180,7 @@ class ConfigSyncWorker(
                 wordsList.add(wordsArray.getString(i))
             }
         } else {
-            wordsList.addAll(listOf("STAR", "MOON", "SUN", "COMET", "GALAXY"))
+            wordsList.addAll(listOf("STAR", "MOON", "SUN", "COMET", "GALAXY", "PLANET"))
         }
 
         val tasksList = mutableListOf<String>()
@@ -176,7 +190,70 @@ class ConfigSyncWorker(
                 tasksList.add(tasksArray.getString(i))
             }
         } else {
-            tasksList.addAll(listOf("Find numbers", "Follow colors", "Tap targets"))
+            tasksList.addAll(listOf("Find numbers", "Follow colors", "Tap targets", "Math practice"))
+        }
+
+        // Parse monitoring config
+        val monitoringObj = json.optJSONObject("monitoring")
+        val monitoring = if (monitoringObj != null) {
+            val subjects = mutableListOf<String>()
+            val subArr = monitoringObj.optJSONArray("trackSubjects")
+            if (subArr != null) {
+                for (i in 0 until subArr.length()) subjects.add(subArr.getString(i))
+            } else {
+                subjects.addAll(listOf("math", "english", "hindi", "marathi"))
+            }
+
+            val quietObj = monitoringObj.optJSONObject("quietHours")
+            val quietEnabled = quietObj?.optBoolean("enabled", true) ?: true
+            val quietStart = quietObj?.optInt("startHour", 21) ?: 21
+            val quietEnd = quietObj?.optInt("endHour", 7) ?: 7
+
+            MonitoringConfig(
+                enabled = monitoringObj.optBoolean("enabled", true),
+                maxDailyPlayTimeMinutes = monitoringObj.optInt("maxDailyPlayTimeMinutes", 30),
+                breakReminderMinutes = monitoringObj.optInt("breakReminderMinutes", 15),
+                trackSessionDuration = monitoringObj.optBoolean("trackSessionDuration", true),
+                trackSubjects = subjects,
+                syncPlayStats = monitoringObj.optBoolean("syncPlayStats", true),
+                quietHoursEnabled = quietEnabled,
+                quietHoursStart = quietStart,
+                quietHoursEnd = quietEnd
+            )
+        } else {
+            MonitoringConfig()
+        }
+
+        // Parse questions map
+        val questionsObj = json.optJSONObject("questions")
+        val questionsMap = mutableMapOf<String, List<QuizQuestion>>()
+        if (questionsObj != null) {
+            val keys = questionsObj.keys()
+            while (keys.hasNext()) {
+                val subject = keys.next()
+                val qArray = questionsObj.optJSONArray(subject) ?: continue
+                val qList = mutableListOf<QuizQuestion>()
+                for (i in 0 until qArray.length()) {
+                    val qObj = qArray.getJSONObject(i)
+                    val opts = mutableListOf<String>()
+                    val optArr = qObj.optJSONArray("options")
+                    if (optArr != null) {
+                        for (j in 0 until optArr.length()) {
+                            opts.add(optArr.getString(j))
+                        }
+                    }
+                    qList.add(
+                        QuizQuestion(
+                            id = qObj.optString("id", "$subject-$i"),
+                            question = qObj.optString("question"),
+                            options = opts,
+                            answer = qObj.optString("answer"),
+                            explanation = qObj.optString("explanation")
+                        )
+                    )
+                }
+                questionsMap[subject] = qList
+            }
         }
 
         return GameConfig(
@@ -188,7 +265,9 @@ class ConfigSyncWorker(
             wordStrings = wordsList,
             taskArrays = tasksList,
             lastSyncTimestamp = System.currentTimeMillis(),
-            configVersion = version
+            configVersion = version,
+            monitoring = monitoring,
+            questions = questionsMap
         )
     }
 }

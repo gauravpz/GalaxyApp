@@ -26,17 +26,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.rememberScalingLazyListState
 import com.gaurav.galaxyapp.data.GameConfig
 
 enum class ActiveScreen {
     HUB,
+    QUIZ,
     MATH_DASH,
     COLOR_MEMO,
     REACTION_TAPPER
@@ -45,6 +46,8 @@ enum class ActiveScreen {
 @Composable
 fun GameHubScreen(
     config: GameConfig,
+    playtimeSeconds: Long,
+    quizHighScore: Int,
     mathHighScore: Int,
     colorMemoHighScore: Int,
     reactionHighScore: Int,
@@ -53,62 +56,98 @@ fun GameHubScreen(
     onSyncConfig: () -> Unit
 ) {
     val listState = rememberScalingLazyListState()
+    val playedMinutes = playtimeSeconds / 60
+    val maxMinutes = config.monitoring.maxDailyPlayTimeMinutes
+    val isLimitReached = config.monitoring.enabled && playedMinutes >= maxMinutes
 
-    // Outer Box with 16.dp padding ensuring round watch boundary integrity
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF090D16))
-            .padding(16.dp),
+            .padding(14.dp),
         contentAlignment = Alignment.Center
     ) {
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
             // Header
             item {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = 2.dp)
                 ) {
                     Text(
-                        text = "★ GALAXY GAMES ★",
+                        text = "★ GALAXY APP ★",
                         color = Color(0xFFFFD54F),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.ExtraBold,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(2.dp))
-                    // Difficulty pill
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color(0xFF1E293B))
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { onToggleDifficulty() }
-                            .padding(horizontal = 8.dp, vertical = 2.dp)
+
+                    // Difficulty & Playtime Pill Row
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "MODE: ${config.difficulty.uppercase()}",
-                            color = Color(0xFF38BDF8),
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0xFF1E293B))
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) { onToggleDifficulty() }
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = config.difficulty.uppercase(),
+                                color = Color(0xFF38BDF8),
+                                fontSize = 8.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        if (config.monitoring.enabled) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(if (isLimitReached) Color(0xFF7F1D1D) else Color(0xFF14532D))
+                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                            ) {
+                                Text(
+                                    text = "⏱ $playedMinutes/${maxMinutes}m",
+                                    color = if (isLimitReached) Color(0xFFFCA5A5) else Color(0xFF86EFAC),
+                                    fontSize = 8.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
                     }
                 }
+            }
+
+            // Primary Card: 3rd Std Quiz (Math, English, Hindi, Marathi)
+            item {
+                GameLauncherCard(
+                    title = "★ 3rd Std Quiz",
+                    subtitle = "Math • Eng • Hindi • Marathi",
+                    gradient = listOf(Color(0xFF4C1D95), Color(0xFF7C3AED)),
+                    iconColor = Color(0xFFA78BFA),
+                    onClick = { onNavigate(ActiveScreen.QUIZ) }
+                )
             }
 
             // Game 1: Math Dash Card
             item {
                 GameLauncherCard(
                     title = "1. Math Dash",
-                    subtitle = "Quick equations • High: $mathHighScore",
+                    subtitle = "Fast equations • High: $mathHighScore",
                     gradient = listOf(Color(0xFF1E3A8A), Color(0xFF2563EB)),
+                    iconColor = Color(0xFF60A5FA),
                     onClick = { onNavigate(ActiveScreen.MATH_DASH) }
                 )
             }
@@ -119,6 +158,7 @@ fun GameHubScreen(
                     title = "2. Color Memo",
                     subtitle = "Simon Says • High: $colorMemoHighScore",
                     gradient = listOf(Color(0xFF065F46), Color(0xFF059669)),
+                    iconColor = Color(0xFF34D399),
                     onClick = { onNavigate(ActiveScreen.COLOR_MEMO) }
                 )
             }
@@ -129,11 +169,12 @@ fun GameHubScreen(
                     title = "3. Fast Tapper",
                     subtitle = "Whack-a-Mole • High: $reactionHighScore",
                     gradient = listOf(Color(0xFF7F1D1D), Color(0xFFDC2626)),
+                    iconColor = Color(0xFFF87171),
                     onClick = { onNavigate(ActiveScreen.REACTION_TAPPER) }
                 )
             }
 
-            // Sync Config Footer Button
+            // Sync Remote Config Footer Button
             item {
                 Box(
                     modifier = Modifier
@@ -144,7 +185,7 @@ fun GameHubScreen(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onSyncConfig() }
-                        .padding(vertical = 6.dp),
+                        .padding(vertical = 5.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Row(
@@ -155,12 +196,12 @@ fun GameHubScreen(
                             imageVector = Icons.Default.Refresh,
                             contentDescription = "Sync",
                             tint = Color(0xFFA0AEC0),
-                            modifier = Modifier.size(12.dp)
+                            modifier = Modifier.size(11.dp)
                         )
                         Text(
                             text = "Sync Remote Config",
                             color = Color(0xFFA0AEC0),
-                            fontSize = 10.sp,
+                            fontSize = 9.sp,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -175,18 +216,19 @@ private fun GameLauncherCard(
     title: String,
     subtitle: String,
     gradient: List<Color>,
+    iconColor: Color,
     onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth(0.92f)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(14.dp))
             .background(Brush.horizontalGradient(gradient))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) { onClick() }
-            .padding(horizontal = 10.dp, vertical = 8.dp)
+            .padding(horizontal = 10.dp, vertical = 7.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -197,19 +239,19 @@ private fun GameLauncherCard(
                 Text(
                     text = title,
                     color = Color.White,
-                    fontSize = 12.sp,
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = subtitle,
                     color = Color(0xFFE2E8F0),
-                    fontSize = 9.sp,
+                    fontSize = 8.sp,
                     maxLines = 1
                 )
             }
             Box(
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(22.dp)
                     .clip(CircleShape)
                     .background(Color(0x33FFFFFF)),
                 contentAlignment = Alignment.Center
@@ -218,7 +260,7 @@ private fun GameLauncherCard(
                     imageVector = Icons.Default.PlayArrow,
                     contentDescription = "Play",
                     tint = Color.White,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(14.dp)
                 )
             }
         }

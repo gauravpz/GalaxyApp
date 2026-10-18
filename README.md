@@ -93,5 +93,34 @@ Since normal Android 15 / Wear OS applications cannot silently toggle system Air
 ## Build & Test Status
 
 - **Build Target**: Android 15 (API 35), minSdk 30 (Wear OS 3.0+).
-- **Compile & Packaging Verification**: Successfully built with Gradle 8.9 (`gradlew assembleDebug` passed).
+- **Compile & Packaging Verification**: Successfully built debug APK at `app/build/outputs/apk/debug/app-debug.apk`.
 - **Design Guidelines**: Strict `14-16.dp` boundary padding for Samsung Galaxy Watch circular displays.
+
+---
+
+## Wireless ADB Deployment to Galaxy Watch 8
+
+### Quick Deployment via Script
+Run the automated deployment script from PowerShell:
+```powershell
+# For initial wireless pairing:
+.\DeployToWatch.ps1 -WatchIP 192.168.1.X -PairingPort <PAIR_PORT> -PairingCode <CODE> -ConnectPort <PORT>
+
+# If already paired:
+.\DeployToWatch.ps1 -WatchIP 192.168.1.X -ConnectPort <PORT>
+```
+
+### Manual ADB Commands
+```powershell
+# 1. Pair with watch (Settings > Developer options > Wireless debugging > Pair new device)
+adb pair 192.168.1.X:<PAIRING_PORT> <PAIRING_CODE>
+
+# 2. Connect to watch
+adb connect 192.168.1.X:<CONNECT_PORT>
+
+# 3. Install APK
+adb install -r -d app\build\outputs\apk\debug\app-debug.apk
+
+# 4. Launch Galaxy Games
+adb shell am start -n com.gaurav.galaxyapp.debug/com.gaurav.galaxyapp.MainActivity
+```

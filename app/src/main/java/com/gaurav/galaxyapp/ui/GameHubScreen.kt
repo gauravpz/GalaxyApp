@@ -77,36 +77,36 @@ fun GameHubScreen(
             item {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(bottom = 2.dp)
+                    modifier = Modifier.padding(bottom = 3.dp)
                 ) {
                     Text(
                         text = "★ GALAXY APP ★",
                         color = Color(0xFFFFD54F),
-                        fontSize = 13.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.ExtraBold,
                         textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(3.dp))
 
                     // Difficulty & Playtime Pill Row
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
+                                .clip(RoundedCornerShape(10.dp))
                                 .background(Color(0xFF1E293B))
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) { onToggleDifficulty() }
-                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                                .padding(horizontal = 8.dp, vertical = 3.dp)
                         ) {
                             Text(
                                 text = config.difficulty.uppercase(),
                                 color = Color(0xFF38BDF8),
-                                fontSize = 8.sp,
+                                fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -114,14 +114,14 @@ fun GameHubScreen(
                         if (config.monitoring.enabled) {
                             Box(
                                 modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
+                                    .clip(RoundedCornerShape(10.dp))
                                     .background(if (isLimitReached) Color(0xFF7F1D1D) else Color(0xFF14532D))
-                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                                    .padding(horizontal = 8.dp, vertical = 3.dp)
                             ) {
                                 Text(
                                     text = "⏱ $playedMinutes/${maxMinutes}m",
                                     color = if (isLimitReached) Color(0xFFFCA5A5) else Color(0xFF86EFAC),
-                                    fontSize = 8.sp,
+                                    fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
@@ -196,13 +196,13 @@ fun GameHubScreen(
                             imageVector = Icons.Default.Refresh,
                             contentDescription = "Sync",
                             tint = Color(0xFFA0AEC0),
-                            modifier = Modifier.size(11.dp)
+                            modifier = Modifier.size(13.dp)
                         )
                         Text(
                             text = "Sync Remote Config",
                             color = Color(0xFFA0AEC0),
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Medium
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
@@ -222,13 +222,13 @@ private fun GameLauncherCard(
     Box(
         modifier = Modifier
             .fillMaxWidth(0.92f)
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(16.dp))
             .background(Brush.horizontalGradient(gradient))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) { onClick() }
-            .padding(horizontal = 10.dp, vertical = 7.dp)
+            .padding(horizontal = 12.dp, vertical = 9.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -239,19 +239,20 @@ private fun GameLauncherCard(
                 Text(
                     text = title,
                     color = Color.White,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
+                Spacer(modifier = Modifier.height(1.dp))
                 Text(
                     text = subtitle,
                     color = Color(0xFFE2E8F0),
-                    fontSize = 8.sp,
+                    fontSize = 11.sp,
                     maxLines = 1
                 )
             }
             Box(
                 modifier = Modifier
-                    .size(22.dp)
+                    .size(26.dp)
                     .clip(CircleShape)
                     .background(Color(0x33FFFFFF)),
                 contentAlignment = Alignment.Center
@@ -260,7 +261,7 @@ private fun GameLauncherCard(
                     imageVector = Icons.Default.PlayArrow,
                     contentDescription = "Play",
                     tint = Color.White,
-                    modifier = Modifier.size(14.dp)
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }

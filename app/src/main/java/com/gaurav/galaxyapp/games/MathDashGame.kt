@@ -181,19 +181,19 @@ fun MathDashGame(
                 Text(
                     text = config.difficulty.uppercase(),
                     color = Color(0xFF4DD0E1),
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = " • ",
                     color = Color.Gray,
-                    fontSize = 10.sp
+                    fontSize = 12.sp
                 )
                 Text(
                     text = "SCORE: $score",
                     color = Color(0xFFFFD54F),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
             }
 
@@ -202,21 +202,21 @@ fun MathDashGame(
             // Equation Card
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(16.dp))
                     .background(Color(0xFF1E2838))
-                    .padding(horizontal = 18.dp, vertical = 6.dp),
+                    .padding(horizontal = 20.dp, vertical = 7.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "${currentQuestion.equationText} = ?",
                     color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Black,
                     textAlign = TextAlign.Center
                 )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // 3 Interactive Circle Choice Buttons
             Row(
@@ -226,7 +226,7 @@ fun MathDashGame(
                 currentQuestion.choices.forEach { choice ->
                     Box(
                         modifier = Modifier
-                            .size(46.dp)
+                            .size(50.dp)
                             .clip(CircleShape)
                             .background(Color(0xFF2962FF))
                             .clickable(
@@ -248,8 +248,8 @@ fun MathDashGame(
                         Text(
                             text = "$choice",
                             color = Color.White,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.ExtraBold
                         )
                     }
                 }

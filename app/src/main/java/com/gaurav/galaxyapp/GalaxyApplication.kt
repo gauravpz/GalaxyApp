@@ -6,7 +6,7 @@ import com.gaurav.galaxyapp.worker.ConfigSyncWorker
 class GalaxyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        // Register 1-hour periodic remote config sync on network connection
+        // Register 6-hour periodic remote config sync on network connection
         ConfigSyncWorker.schedulePeriodicSync(this)
     }
 }

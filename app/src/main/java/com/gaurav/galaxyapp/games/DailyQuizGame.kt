@@ -265,15 +265,15 @@ private fun SubjectQuizScreen(
                 Text(
                     text = "${subject.uppercase()} • ${(currentIndex % questionsList.size) + 1}/${questionsList.size}",
                     color = Color(0xFF4DD0E1),
-                    fontSize = 9.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
                 )
-                Text(text = " • ", color = Color.Gray, fontSize = 9.sp)
+                Text(text = " • ", color = Color.Gray, fontSize = 11.sp)
                 Text(
                     text = "PTS: $score",
                     color = Color(0xFFFFD54F),
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
             }
 
@@ -282,8 +282,8 @@ private fun SubjectQuizScreen(
             // Question Card
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(0.92f)
-                    .clip(RoundedCornerShape(12.dp))
+                    .fillMaxWidth(0.94f)
+                    .clip(RoundedCornerShape(14.dp))
                     .background(Color(0xFF1E2838))
                     .padding(horizontal = 10.dp, vertical = 6.dp),
                 contentAlignment = Alignment.Center
@@ -291,8 +291,8 @@ private fun SubjectQuizScreen(
                 Text(
                     text = currentQ.question,
                     color = Color.White,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Black,
                     textAlign = TextAlign.Center
                 )
             }
@@ -302,12 +302,12 @@ private fun SubjectQuizScreen(
                 Text(
                     text = currentQ.explanation,
                     color = Color(0xFFA7F3D0),
-                    fontSize = 9.sp,
+                    fontSize = 11.sp,
                     textAlign = TextAlign.Center
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             // Choices
             Column(
@@ -317,7 +317,7 @@ private fun SubjectQuizScreen(
                 currentQ.options.take(3).forEach { option ->
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.85f)
+                            .fillMaxWidth(0.88f)
                             .clip(RoundedCornerShape(16.dp))
                             .background(Color(0xFF2563EB))
                             .clickable(
@@ -337,14 +337,14 @@ private fun SubjectQuizScreen(
                                     showExplanation = true
                                 }
                             }
-                            .padding(vertical = 5.dp, horizontal = 10.dp),
+                            .padding(vertical = 6.dp, horizontal = 10.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = option,
                             color = Color.White,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             maxLines = 1
                         )

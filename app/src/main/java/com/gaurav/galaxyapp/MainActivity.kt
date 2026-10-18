@@ -1,11 +1,12 @@
 package com.gaurav.galaxyapp
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +19,6 @@ import com.gaurav.galaxyapp.games.ReactionTapperGame
 import com.gaurav.galaxyapp.ui.ActiveScreen
 import com.gaurav.galaxyapp.ui.GameHubScreen
 import com.gaurav.galaxyapp.viewmodel.GameViewModel
-import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
 
@@ -26,6 +26,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Fix 4: Reduce screen brightness to 50% — OLED display is the #1 battery consumer.
+        // Half-brightness is fully readable indoors and on a child's small watch face.
+        window.attributes = window.attributes.apply {
+            screenBrightness = 0.5f
+        }
+
         setContent {
             WearGameApp(viewModel = viewModel)
         }
@@ -43,12 +50,23 @@ fun WearGameApp(viewModel: GameViewModel) {
 
     var currentScreen by remember { mutableStateOf(ActiveScreen.HUB) }
 
-    // Increment playtime by 5s while kid is playing any active game screen
-    LaunchedEffect(currentScreen) {
+    // Fix 1: Battery-efficient playtime tracking.
+    // OLD: while(true) { delay(5000); writeDataStore() } — 360 DataStore writes per 30-min session.
+    // NEW: Record session start time in-memory; flush ONE write to DataStore when the user exits
+    //      the game screen. DisposableEffect's onDispose fires on every screen transition.
+    val sessionStartMs = remember { mutableStateOf(0L) }
+    DisposableEffect(currentScreen) {
         if (currentScreen != ActiveScreen.HUB && config.monitoring.enabled) {
-            while (true) {
-                delay(5000L)
-                viewModel.recordPlaytime(5L)
+            sessionStartMs.value = System.currentTimeMillis()
+        }
+        onDispose {
+            // Flush accumulated play-seconds once on screen exit — from 360 writes → 1 write
+            if (sessionStartMs.value > 0L && config.monitoring.enabled) {
+                val elapsedSeconds = (System.currentTimeMillis() - sessionStartMs.value) / 1000L
+                if (elapsedSeconds > 0L) {
+                    viewModel.recordPlaytime(elapsedSeconds)
+                }
+                sessionStartMs.value = 0L
             }
         }
     }

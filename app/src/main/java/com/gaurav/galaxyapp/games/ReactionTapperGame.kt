@@ -167,7 +167,7 @@ fun ReactionTapperGame(
             Box(
                 modifier = Modifier
                     .offset(x = targetOffsetX, y = targetOffsetY)
-                    .size(42.dp)
+                    .size(48.dp)
                     .scale(scaleAnim.value)
                     .clip(CircleShape)
                     .background(
@@ -184,7 +184,7 @@ fun ReactionTapperGame(
                 Text(
                     text = "★",
                     color = Color.Yellow,
-                    fontSize = 18.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Black
                 )
             }
@@ -197,23 +197,24 @@ fun ReactionTapperGame(
                 Text(
                     text = "TIME'S UP!",
                     color = Color(0xFFFF5252),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Black
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "Score: $score",
                     color = Color.White,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
                 Text(
                     text = "Hits: $hits • Misses: $misses",
-                    color = Color.Gray,
-                    fontSize = 10.sp
+                    color = Color.LightGray,
+                    fontSize = 12.sp
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Box(
                     modifier = Modifier
-                        .padding(top = 6.dp)
                         .clip(RoundedCornerShape(14.dp))
                         .background(Color(0xFF2962FF))
                         .clickable(
@@ -225,7 +226,7 @@ fun ReactionTapperGame(
                             misses = 0
                             isPlaying = true
                         }
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                        .padding(horizontal = 14.dp, vertical = 6.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -233,13 +234,13 @@ fun ReactionTapperGame(
                             imageVector = Icons.Default.Refresh,
                             contentDescription = "Play Again",
                             tint = Color.White,
-                            modifier = Modifier.size(12.dp)
+                            modifier = Modifier.size(14.dp)
                         )
                         Text(
                             text = " PLAY AGAIN",
                             color = Color.White,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.ExtraBold
                         )
                     }
                 }
@@ -252,24 +253,24 @@ fun ReactionTapperGame(
             contentAlignment = Alignment.BottomCenter
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color(0x88000000))
-                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0x99000000))
+                    .padding(horizontal = 10.dp, vertical = 3.dp)
             ) {
                 Text(
                     text = "⏱ ${timeLeftSeconds}s",
                     color = if (timeLeftSeconds <= 5) Color(0xFFFF5252) else Color(0xFF80D8FF),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
                 Text(
                     text = "PTS: $score",
                     color = Color(0xFFFFD54F),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
             }
         }

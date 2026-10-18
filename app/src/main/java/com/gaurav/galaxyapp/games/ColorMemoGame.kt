@@ -232,7 +232,7 @@ fun ColorMemoGame(
             // Center Circular Info Hub
             Box(
                 modifier = Modifier
-                    .size(62.dp)
+                    .size(70.dp)
                     .clip(CircleShape)
                     .background(Color(0xFF1A2230)),
                 contentAlignment = Alignment.Center
@@ -255,14 +255,14 @@ fun ColorMemoGame(
                         Text(
                             text = "Score: $currentScore",
                             color = Color.White,
-                            fontSize = 9.sp,
+                            fontSize = 11.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "RETRY",
                             color = Color(0xFFFF5252),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.ExtraBold
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Black
                         )
                     }
                 } else {
@@ -272,14 +272,14 @@ fun ColorMemoGame(
                         Text(
                             text = "RND $roundNumber",
                             color = Color(0xFFFFD54F),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.ExtraBold
                         )
                         Text(
                             text = statusText,
                             color = if (isShowingSequence) Color(0xFF80D8FF) else Color(0xFFB9F6CA),
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
                         )
                     }

@@ -48,14 +48,14 @@ class ConfigSyncWorker(
         var githubPat: String = ""
 
         /**
-         * Schedules the 1-hour periodic work request with network connected constraint.
+         * Schedules the 6-hour periodic work request with network connected constraint.
          */
         fun schedulePeriodicSync(context: Context) {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-            val syncRequest = PeriodicWorkRequestBuilder<ConfigSyncWorker>(1, TimeUnit.HOURS)
+            val syncRequest = PeriodicWorkRequestBuilder<ConfigSyncWorker>(6, TimeUnit.HOURS)
                 .setConstraints(constraints)
                 .build()
 
@@ -64,7 +64,7 @@ class ConfigSyncWorker(
                 ExistingPeriodicWorkPolicy.KEEP,
                 syncRequest
             )
-            Log.d(TAG, "ConfigSyncWorker periodic work scheduled for 1-hour interval.")
+            Log.d(TAG, "ConfigSyncWorker periodic work scheduled for 6-hour interval.")
         }
 
         /**
@@ -121,8 +121,8 @@ class ConfigSyncWorker(
             val url = URL(endpointUrl)
             connection = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "GET"
-                connectTimeout = 8000
-                readTimeout = 8000
+                connectTimeout = 5000
+                readTimeout = 5000
                 setRequestProperty("User-Agent", "GalaxyApp-WearOS")
                 if (!isRaw) {
                     setRequestProperty("Accept", "application/vnd.github.v3.raw")

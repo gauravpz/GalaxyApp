@@ -1,8 +1,11 @@
 package com.gaurav.galaxyapp.data
 
+import androidx.compose.runtime.Stable
+
 /**
  * Single question model for quiz questions (Math, English, Hindi, Marathi).
  */
+@Stable
 data class QuizQuestion(
     val id: String = "",
     val question: String = "",
@@ -14,6 +17,7 @@ data class QuizQuestion(
 /**
  * Monitoring and playtime control configuration.
  */
+@Stable
 data class MonitoringConfig(
     val enabled: Boolean = true,
     val maxDailyPlayTimeMinutes: Int = 30,
@@ -29,6 +33,7 @@ data class MonitoringConfig(
 /**
  * Data model for game configuration fetched from remote config or local defaults.
  */
+@Stable
 data class GameConfig(
     val difficulty: String = "medium",
     val mathMaxRange: Int = 20,

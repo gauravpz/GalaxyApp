@@ -13,3 +13,4 @@
 *.jks
 app/build/
 build/
+.kotlin/
